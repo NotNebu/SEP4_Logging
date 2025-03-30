@@ -1,4 +1,4 @@
-name: Deploy Logging Stack to AWS EC2
+name: Deploy Logging Stack to EC2
 
 on:
   push:
@@ -20,8 +20,13 @@ jobs:
     - name: Deploy via SSH
       run: |
         ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
-          cd ~/sep4_logging
+          set -e
+          cd ~
+          if [ ! -d "SEP4_Logging" ]; then
+            git clone https://github.com/NotNebu/SEP4_Logging.git
+          fi
+          cd SEP4_Logging
           git pull origin main
-          docker-compose down
+          docker-compose down || true
           docker-compose up -d --build
         EOF
