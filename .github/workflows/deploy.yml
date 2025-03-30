@@ -20,7 +20,7 @@ jobs:
     - name: Deploy via SSH
       run: |
         ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
-          cd ~/logging-stack
+          cd ~/sep4_logging
           git pull origin main
           docker-compose down
           docker-compose up -d --build
